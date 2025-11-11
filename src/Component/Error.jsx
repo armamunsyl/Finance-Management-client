@@ -1,9 +1,9 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const ErrorPage = () => {
   return (
     <section className="bg-[#F7FAFC] min-h-screen flex flex-col justify-center items-center text-center px-6">
-
+ 
       <img
         src="https://cdn-icons-png.flaticon.com/512/7486/7486803.png"
         alt="Error Illustration"
@@ -15,10 +15,9 @@ const ErrorPage = () => {
         Oops! Page Not Found
       </h2>
       <p className="text-[#6B7280] max-w-md mb-6">
-        The page you're looking for doesn't exist or has been moved.
+        The page you're looking for doesn't exist or has been moved.  
         Please check the URL or go back to the homepage.
       </p>
-
 
       <Link
         to="/"

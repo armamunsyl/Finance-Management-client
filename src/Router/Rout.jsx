@@ -9,6 +9,7 @@ import Register from '../Auth/Register';
 import AddTrans from '../Component/AddTrans';
 import MyTrans from '../Component/MyTrans';
 import Report from '../Component/Report';
+import MyProfile from '../Component/MyProfile';
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: "/reports",
                 Component: Report,
+            },
+            {
+                path: "/myprofile",
+                Component: MyProfile,
             }
 
 
