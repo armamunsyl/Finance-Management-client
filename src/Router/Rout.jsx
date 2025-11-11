@@ -10,6 +10,7 @@ import AddTrans from '../Component/AddTrans';
 import MyTrans from '../Component/MyTrans';
 import Report from '../Component/Report';
 import MyProfile from '../Component/MyProfile';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
     {
@@ -32,17 +33,23 @@ const router = createBrowserRouter([
             ,
             {
                 path: "/add-transaction",
-                Component: AddTrans,
+                element: <PrivateRoute>
+                    <AddTrans></AddTrans>
+                </PrivateRoute>,
             }
             ,
             {
                 path: "/my-transactions",
-                Component: MyTrans,
+                element: <PrivateRoute>
+                    <MyTrans></MyTrans>
+                </PrivateRoute>,
             }
             ,
             {
                 path: "/reports",
-                Component: Report,
+                element: <PrivateRoute>
+                    <Report></Report>
+                </PrivateRoute>,
             },
             {
                 path: "/myprofile",
