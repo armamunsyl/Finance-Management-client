@@ -1,10 +1,38 @@
-import { Link } from "react-router";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const Register = () => {
+  const { createUser, updateUserProfile, googleLogin } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const photo = e.target.photo.value;
+    const password = e.target.password.value;
+    setError("");
+
+    createUser(email, password)
+      .then(() => {
+        updateUserProfile(name, photo)
+          .then(() => navigate("/"))
+          .catch(() => setError("Profile update failed"));
+      })
+      .catch(() => setError("Registration failed"));
+  };
+
+  const handleGoogleRegister = () => {
+    googleLogin()
+      .then(() => navigate("/"))
+      .catch(() => setError("Google registration failed"));
+  };
+
   return (
     <div className="min-h-screen bg-[#F7FAFC] flex items-center justify-center px-4 mt-4">
       <div className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md border border-[#E5E7EB]">
-        
         <h2 className="text-3xl font-bold text-center text-[#1F2937] mb-2">
           Create an Account
         </h2>
@@ -12,13 +40,15 @@ const Register = () => {
           Join FinEase and manage your money smartly
         </p>
 
-        <form className="space-y-5">
+        <form onSubmit={handleRegister} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Full Name
             </label>
             <input
               type="text"
+              name="name"
+              required
               placeholder="Abdur Rahman"
               className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
             />
@@ -30,6 +60,8 @@ const Register = () => {
             </label>
             <input
               type="email"
+              name="email"
+              required
               placeholder="example@email.com"
               className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
             />
@@ -41,6 +73,8 @@ const Register = () => {
             </label>
             <input
               type="text"
+              name="photo"
+              required
               placeholder="Photo URL"
               className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
             />
@@ -52,6 +86,8 @@ const Register = () => {
             </label>
             <input
               type="password"
+              name="password"
+              required
               placeholder="Password"
               className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
             />
@@ -59,6 +95,8 @@ const Register = () => {
               Must include 1 uppercase, 1 lowercase & minimum 6 characters
             </p>
           </div>
+
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
           <button
             type="submit"
@@ -74,7 +112,10 @@ const Register = () => {
           <hr className="flex-1 border-[#E5E7EB]" />
         </div>
 
-        <button className="w-full flex items-center justify-center gap-2 border border-[#D1D5DB] py-2 rounded-lg hover:bg-[#F9FAFB] transition-all duration-200">
+        <button
+          onClick={handleGoogleRegister}
+          className="w-full flex items-center justify-center gap-2 border border-[#D1D5DB] py-2 rounded-lg hover:bg-[#F9FAFB] transition-all duration-200"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
             alt="Google icon"
@@ -85,7 +126,10 @@ const Register = () => {
 
         <p className="text-center text-sm text-[#6B7280] mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-[#3BB273] font-medium hover:underline">
+          <Link
+            to="/login"
+            className="text-[#3BB273] font-medium hover:underline"
+          >
             Login
           </Link>
         </p>
