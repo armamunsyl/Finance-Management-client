@@ -24,8 +24,8 @@ const AddTrans = () => {
 
     const newTransaction = {
       ...formData,
-      userEmail: user.email,
-      userName: user.displayName,
+      userEmail: user?.email || "test@example.com",
+      userName: user?.displayName || "Test User",
     };
 
     try {
@@ -35,7 +35,7 @@ const AddTrans = () => {
       );
 
       if (res.data.insertedId) {
-        setMessage("Transaction added successfully!");
+        setMessage("✅ Transaction added successfully!");
         setFormData({
           type: "",
           category: "",
@@ -52,6 +52,20 @@ const AddTrans = () => {
     }
   };
 
+  const incomeCategories = ["Job", "Business", "Other"];
+  const expenseCategories = [
+    "Food",
+    "Transport",
+    "Education",
+    "Shopping",
+    "Home",
+    "Freelance",
+    "Entertainment",
+    "Health",
+    "Investment",
+    "Others",
+  ];
+
   return (
     <div className="min-h-screen bg-[#F7FAFC] flex items-center justify-center px-4 py-10">
       <div className="bg-white shadow-md rounded-2xl p-8 w-full max-w-2xl border border-[#E5E7EB]">
@@ -60,6 +74,7 @@ const AddTrans = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Type (Income / Expense)
@@ -77,6 +92,7 @@ const AddTrans = () => {
             </select>
           </div>
 
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Category
@@ -86,17 +102,21 @@ const AddTrans = () => {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+              disabled={!formData.type}
+              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none bg-white disabled:bg-gray-100"
             >
               <option value="">Select Category</option>
-              <option>Food</option>
-              <option>Transport</option>
-              <option>Education</option>
-              <option>Shopping</option>
-              <option>Home</option>
-              <option>Others</option>
+              {(formData.type === "income"
+                ? incomeCategories
+                : expenseCategories
+              ).map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
             </select>
           </div>
+
 
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
@@ -113,6 +133,7 @@ const AddTrans = () => {
             />
           </div>
 
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Description
@@ -125,6 +146,7 @@ const AddTrans = () => {
               className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 h-24 resize-none focus:ring-2 focus:ring-[#3BB273] outline-none"
             ></textarea>
           </div>
+
 
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
@@ -139,6 +161,7 @@ const AddTrans = () => {
               className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
             />
           </div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -165,6 +188,7 @@ const AddTrans = () => {
               />
             </div>
           </div>
+
 
           <button
             type="submit"
