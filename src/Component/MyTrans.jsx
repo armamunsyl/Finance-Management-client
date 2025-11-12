@@ -1,23 +1,49 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Auth/AuthProvider";
+import axios from "axios";
 
 const MyTrans = () => {
+  const { user } = useContext(AuthContext) || {};
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [selectedTrans, setSelectedTrans] = useState(null);
 
   useEffect(() => {
-    if (showModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    if (showModal) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
   }, [showModal]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!user?.email) return;
+      const res = await axios.get(
+        `http://localhost:3000/transactions?email=${user.email}`
+      );
+      setTransactions(res.data);
+      setLoading(false);
+    };
+    fetchTransactions();
+  }, [user?.email]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-lg text-[#3BB273]">
+        Loading your transactions...
+      </div>
+    );
+  }
+
+  const handleUpdateClick = (transaction) => {
+    setSelectedTrans(transaction);
+    setShowModal(true);
+  };
 
   return (
     <section className="bg-[#F7FAFC] min-h-screen px-4 md:px-20 py-12 relative">
-
       <h2 className="text-3xl font-semibold text-[#1F2937] mb-10 text-center">
         My Transactions
       </h2>
-
       <div className="hidden md:block overflow-x-auto max-w-6xl mx-auto bg-white border border-[#E5E7EB] rounded-2xl shadow-sm">
         <table className="w-full border-collapse">
           <thead className="bg-[#3BB273] text-white">
@@ -30,62 +56,58 @@ const MyTrans = () => {
               <th className="py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr className="border-b hover:bg-[#F9FAFB] transition-all duration-200">
-              <td className="py-3 px-4">1</td>
-              <td className="py-3 px-4 text-[#10B981] font-medium">Income</td>
-              <td className="py-3 px-4 text-[#374151]">Freelance</td>
-              <td className="py-3 px-4 text-[#10B981] font-semibold">+$1200</td>
-              <td className="py-3 px-4 text-[#6B7280]">2025-02-14</td>
-              <td className="py-3 px-4 text-center space-x-2">
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="px-3 py-1 bg-[#3BB273] text-white rounded-md text-sm hover:bg-[#34A267] transition-all"
+            {transactions.length > 0 ? (
+              transactions.map((t, index) => (
+                <tr
+                  key={t._id}
+                  className="border-b hover:bg-[#F9FAFB] transition-all duration-200"
                 >
-                  Update
-                </button>
-                <button className="px-3 py-1 bg-[#EF4444] text-white rounded-md text-sm hover:bg-[#DC2626] transition-all">
-                  Delete
-                </button>
-                <button className="px-3 py-1 border border-[#3BB273] text-[#3BB273] rounded-md text-sm hover:bg-[#3BB273] hover:text-white transition-all">
-                  View
-                </button>
-              </td>
-            </tr>
+                  <td className="py-3 px-4">{index + 1}</td>
+                  <td
+                    className={`py-3 px-4 font-medium ${t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                      }`}
+                  >
+                    {t.type}
+                  </td>
+                  <td className="py-3 px-4 text-[#374151]">{t.category}</td>
+                  <td
+                    className={`py-3 px-4 font-semibold ${t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                      }`}
+                  >
+                    {t.type === "income" ? "+" : "-"}${t.amount}
+                  </td>
+                  <td className="py-3 px-4 text-[#6B7280]">{t.date}</td>
+                  <td className="py-3 px-4 text-center space-x-2">
+                    <button
+                      onClick={() => handleUpdateClick(t)}
+                      className="px-3 py-1 bg-[#3BB273] text-white rounded-md text-sm hover:bg-[#34A267] transition-all"
+                    >
+                      Update
+                    </button>
+                    <button className="px-3 py-1 bg-[#EF4444] text-white rounded-md text-sm hover:bg-[#DC2626] transition-all">
+                      Delete
+                    </button>
+                    <button className="px-3 py-1 border border-[#3BB273] text-[#3BB273] rounded-md text-sm hover:bg-[#3BB273] hover:text-white transition-all">
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center py-6 text-[#6B7280]">
+                  No transactions found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      <div className="md:hidden space-y-4">
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-5">
-          <div className="flex justify-between items-center mb-2">
-            <p className="text-[#10B981] font-semibold">Income</p>
-            <p className="text-[#10B981] font-bold">+$1200</p>
-          </div>
-          <p className="text-sm text-[#374151]">Category: Freelance</p>
-          <p className="text-sm text-[#6B7280] mb-3">Date: 2025-02-14</p>
-          <div className="flex justify-between">
-            <button
-              onClick={() => setShowModal(true)}
-              className="px-3 py-1 bg-[#3BB273] text-white text-sm rounded-md hover:bg-[#34A267] transition-all"
-            >
-              Update
-            </button>
-            <button className="px-3 py-1 bg-[#EF4444] text-white text-sm rounded-md hover:bg-[#DC2626] transition-all">
-              Delete
-            </button>
-            <button className="px-3 py-1 border border-[#3BB273] text-[#3BB273] text-sm rounded-md hover:bg-[#3BB273] hover:text-white transition-all">
-              View
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {showModal && (
+      {showModal && selectedTrans && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
-
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-2xl"
@@ -97,17 +119,18 @@ const MyTrans = () => {
             <h2 className="text-xl font-semibold text-center text-[#1F2937] mb-5">
               Update Transaction
             </h2>
+
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-[#374151] mb-1">
                   Type
                 </label>
                 <select
-                  defaultValue="Income"
+                  defaultValue={selectedTrans.type}
                   className="w-full border border-[#D1D5DB] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
                 >
-                  <option>Income</option>
-                  <option>Expense</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
                 </select>
               </div>
 
@@ -116,7 +139,7 @@ const MyTrans = () => {
                   Description
                 </label>
                 <textarea
-                  defaultValue="Payment received from freelance project."
+                  defaultValue={selectedTrans.description}
                   className="w-full border border-[#D1D5DB] rounded-lg px-3 py-2 h-20 resize-none focus:ring-2 focus:ring-[#3BB273] outline-none"
                 ></textarea>
               </div>
@@ -126,7 +149,7 @@ const MyTrans = () => {
                   Category
                 </label>
                 <select
-                  defaultValue="Freelance"
+                  defaultValue={selectedTrans.category}
                   className="w-full border border-[#D1D5DB] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
                 >
                   <option>Food</option>
@@ -144,7 +167,7 @@ const MyTrans = () => {
                 </label>
                 <input
                   type="number"
-                  defaultValue="1200"
+                  defaultValue={selectedTrans.amount}
                   className="w-full border border-[#D1D5DB] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
                 />
               </div>
@@ -155,7 +178,7 @@ const MyTrans = () => {
                 </label>
                 <input
                   type="date"
-                  defaultValue="2025-02-14"
+                  defaultValue={selectedTrans.date}
                   className="w-full border border-[#D1D5DB] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
                 />
               </div>
@@ -174,4 +197,4 @@ const MyTrans = () => {
   );
 };
 
-export default MyTrans
+export default MyTrans;
