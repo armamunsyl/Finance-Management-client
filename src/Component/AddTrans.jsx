@@ -1,6 +1,57 @@
-import React from 'react'
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../Auth/AuthProvider";
+import axios from "axios";
 
 const AddTrans = () => {
+  const { user } = useContext(AuthContext) || {};
+  const [formData, setFormData] = useState({
+    type: "",
+    category: "",
+    amount: "",
+    description: "",
+    date: "",
+  });
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    const newTransaction = {
+      ...formData,
+      userEmail: user.email,
+      userName: user.displayName,
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/transactions",
+        newTransaction
+      );
+
+      if (res.data.insertedId) {
+        setMessage("Transaction added successfully!");
+        setFormData({
+          type: "",
+          category: "",
+          amount: "",
+          description: "",
+          date: "",
+        });
+      } else {
+        setMessage("Failed to add transaction. Try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Server error. Please check connection.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F7FAFC] flex items-center justify-center px-4 py-10">
       <div className="bg-white shadow-md rounded-2xl p-8 w-full max-w-2xl border border-[#E5E7EB]">
@@ -8,23 +59,36 @@ const AddTrans = () => {
           Add New Transaction
         </h2>
 
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Type (Income / Expense)
             </label>
-            <select className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none">
-              <option>Select Type</option>
-              <option>Income</option>
-              <option>Expense</option>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              required
+              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+            >
+              <option value="">Select Type</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
             </select>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Category
             </label>
-            <select className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none">
-              <option>Select Category</option>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+            >
+              <option value="">Select Category</option>
               <option>Food</option>
               <option>Transport</option>
               <option>Education</option>
@@ -33,21 +97,30 @@ const AddTrans = () => {
               <option>Others</option>
             </select>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Amount
             </label>
             <input
               type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              required
               placeholder="Enter amount"
               className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Description
             </label>
             <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
               placeholder="Write a short note..."
               className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 h-24 resize-none focus:ring-2 focus:ring-[#3BB273] outline-none"
             ></textarea>
@@ -59,6 +132,10 @@ const AddTrans = () => {
             </label>
             <input
               type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
               className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
             />
           </div>
@@ -70,7 +147,7 @@ const AddTrans = () => {
               </label>
               <input
                 type="text"
-                value="John Doe"
+                value={user?.displayName || "Test User"}
                 readOnly
                 className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 bg-[#F3F4F6] text-gray-500 cursor-not-allowed"
               />
@@ -82,21 +159,27 @@ const AddTrans = () => {
               </label>
               <input
                 type="text"
-                value="johndoe@gmail.com"
+                value={user?.email || "test@example.com"}
                 readOnly
                 className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 bg-[#F3F4F6] text-gray-500 cursor-not-allowed"
               />
             </div>
           </div>
+
           <button
-            type="button"
+            type="submit"
             className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all duration-200"
           >
             Add Transaction
           </button>
         </form>
+
+        {message && (
+          <p className="text-center mt-4 font-medium text-[#374151]">{message}</p>
+        )}
       </div>
     </div>
   );
 };
-export default AddTrans
+
+export default AddTrans;
