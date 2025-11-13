@@ -1,33 +1,78 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
+import Swal from "sweetalert2";
 
 const Register = () => {
-  const { createUser, updateUserProfile, googleLogin } = useContext(AuthContext);
+  const { createUser, updateUserProfile, googleLogin } =
+    useContext(AuthContext) || {};
+
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const name = e.target.name.value;
     const email = e.target.email.value;
     const photo = e.target.photo.value;
     const password = e.target.password.value;
-    setError("");
 
     createUser(email, password)
       .then(() => {
         updateUserProfile(name, photo)
-          .then(() => navigate("/"))
-          .catch(() => setError("Profile update failed"));
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Registration Successful!",
+              text: "Welcome to FinEase.",
+              confirmButtonColor: "#3BB273",
+            });
+
+            navigate("/");
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Profile Update Failed!",
+              text: "Your account was created but profile update failed.",
+              confirmButtonColor: "#EF4444",
+            });
+          });
       })
-      .catch(() => setError("Registration failed"));
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed!",
+          text: "Please try again.",
+          confirmButtonColor: "#EF4444",
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleGoogleRegister = () => {
+    setLoading(true);
+
     googleLogin()
-      .then(() => navigate("/"))
-      .catch(() => setError("Google registration failed"));
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Google Sign Up Successful!",
+          confirmButtonColor: "#3BB273",
+        });
+
+        navigate("/");
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Google Registration Failed!",
+          confirmButtonColor: "#EF4444",
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -41,6 +86,7 @@ const Register = () => {
         </p>
 
         <form onSubmit={handleRegister} className="space-y-5">
+  
           <div>
             <label className="block text-sm font-medium text-[#374151] mb-1">
               Full Name
@@ -96,13 +142,12 @@ const Register = () => {
             </p>
           </div>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
           <button
             type="submit"
-            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all duration-200"
+            disabled={loading}
+            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all duration-200 disabled:opacity-60"
           >
-            Register
+            {loading ? "Creating account..." : "Register"}
           </button>
         </form>
 
@@ -114,7 +159,8 @@ const Register = () => {
 
         <button
           onClick={handleGoogleRegister}
-          className="w-full flex items-center justify-center gap-2 border border-[#D1D5DB] py-2 rounded-lg hover:bg-[#F9FAFB] transition-all duration-200"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 border border-[#D1D5DB] py-2 rounded-lg hover:bg-[#F9FAFB] transition-all duration-200 disabled:opacity-60"
         >
           <img
             src="https://cdn-icons-png.flaticon.com/512/281/281764.png"

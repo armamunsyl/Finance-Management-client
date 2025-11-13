@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../Auth/AuthProvider";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const AddTrans = () => {
   const { user } = useContext(AuthContext) || {};
@@ -11,7 +12,6 @@ const AddTrans = () => {
     description: "",
     date: "",
   });
-  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,12 +20,11 @@ const AddTrans = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
 
     const newTransaction = {
       ...formData,
-      userEmail: user?.email || "test@example.com",
-      userName: user?.displayName || "Test User",
+      userEmail: user?.email,
+      userName: user?.displayName,
     };
 
     try {
@@ -35,7 +34,13 @@ const AddTrans = () => {
       );
 
       if (res.data.insertedId) {
-        setMessage("✅ Transaction added successfully!");
+        Swal.fire({
+          icon: "success",
+          title: "Transaction Added!",
+          text: "Your transaction was saved successfully.",
+          confirmButtonColor: "#3BB273",
+        });
+
         setFormData({
           type: "",
           category: "",
@@ -43,12 +48,14 @@ const AddTrans = () => {
           description: "",
           date: "",
         });
-      } else {
-        setMessage("Failed to add transaction. Try again.");
       }
-    } catch (error) {
-      console.error(error);
-      setMessage("Server error. Please check connection.");
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Could not add transaction. Try again.",
+        confirmButtonColor: "#EF4444",
+      });
     }
   };
 
@@ -74,17 +81,14 @@ const AddTrans = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
-              Type (Income / Expense)
-            </label>
+            <label className="block mb-1">Type</label>
             <select
               name="type"
+              required
               value={formData.type}
               onChange={handleChange}
-              required
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+              className="w-full border rounded-lg px-3 py-2"
             >
               <option value="">Select Type</option>
               <option value="income">Income</option>
@@ -92,115 +96,67 @@ const AddTrans = () => {
             </select>
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
-              Category
-            </label>
+            <label className="block mb-1">Category</label>
             <select
               name="category"
-              value={formData.category}
-              onChange={handleChange}
               required
               disabled={!formData.type}
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none bg-white disabled:bg-gray-100"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2"
             >
               <option value="">Select Category</option>
               {(formData.type === "income"
                 ? incomeCategories
                 : expenseCategories
-              ).map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+              ).map((c) => (
+                <option key={c}>{c}</option>
               ))}
             </select>
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
-              Amount
-            </label>
+            <label className="block mb-1">Amount</label>
             <input
               type="number"
+              required
               name="amount"
               value={formData.amount}
               onChange={handleChange}
-              required
-              placeholder="Enter amount"
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+              className="w-full border rounded-lg px-3 py-2"
             />
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
-              Description
-            </label>
+            <label className="block mb-1">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Write a short note..."
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 h-24 resize-none focus:ring-2 focus:ring-[#3BB273] outline-none"
+              className="w-full border rounded-lg px-3 py-2 h-20"
             ></textarea>
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
-              Date
-            </label>
+            <label className="block mb-1">Date</label>
             <input
               type="date"
+              required
               name="date"
               value={formData.date}
               onChange={handleChange}
-              required
-              className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3BB273] outline-none"
+              className="w-full border rounded-lg px-3 py-2"
             />
           </div>
 
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1">
-                User Name (Read-only)
-              </label>
-              <input
-                type="text"
-                value={user?.displayName || "Test User"}
-                readOnly
-                className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 bg-[#F3F4F6] text-gray-500 cursor-not-allowed"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1">
-                User Email (Read-only)
-              </label>
-              <input
-                type="text"
-                value={user?.email || "test@example.com"}
-                readOnly
-                className="w-full border border-[#D1D5DB] rounded-lg px-4 py-2 bg-[#F3F4F6] text-gray-500 cursor-not-allowed"
-              />
-            </div>
-          </div>
-
-
           <button
             type="submit"
-            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all duration-200"
+            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold"
           >
             Add Transaction
           </button>
         </form>
-
-        {message && (
-          <p className="text-center mt-4 font-medium text-[#374151]">{message}</p>
-        )}
       </div>
     </div>
   );
