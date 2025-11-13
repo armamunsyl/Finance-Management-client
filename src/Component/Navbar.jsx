@@ -4,19 +4,54 @@ import { AuthContext } from "../Auth/AuthProvider";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  // console.log(user.photoURL)
+
+  const activeLink =
+    "text-[#3BB273] font-semibold border-b-2 border-[#3BB273] pb-1";
+  const normalLink = "hover:text-[#3BB273] transition";
 
   const navLinks = (
     <>
-      <li><NavLink to="/">Home</NavLink></li>
-      <li><NavLink to="/add-transaction">Add Transaction</NavLink></li>
-      <li><NavLink to="/my-transactions">My Transactions</NavLink></li>
-      <li><NavLink to="/reports">Reports</NavLink></li>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) => (isActive ? activeLink : normalLink)}
+        >
+          Home
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/add-transaction"
+          className={({ isActive }) => (isActive ? activeLink : normalLink)}
+        >
+          Add Transaction
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/my-transactions"
+          className={({ isActive }) => (isActive ? activeLink : normalLink)}
+        >
+          My Transactions
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/reports"
+          className={({ isActive }) => (isActive ? activeLink : normalLink)}
+        >
+          Reports
+        </NavLink>
+      </li>
     </>
   );
 
   return (
     <nav className="bg-white text-[#1F2937] shadow-md px-6 md:px-10 py-3 flex items-center justify-between">
+
       <div>
         <Link to="/" className="text-2xl font-bold tracking-wide">
           <span className="text-[#3BB273]">Fin</span>
@@ -48,11 +83,15 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} className="cursor-pointer">
               <img
-                src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                src={
+                  user.photoURL ||
+                  "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                }
                 alt="Profile"
                 className="w-10 h-10 rounded-full border-2 border-[#3BB273] object-cover"
               />
             </div>
+
             <ul
               tabIndex={0}
               className="dropdown-content menu p-3 shadow bg-white rounded-xl w-64 border border-[#E5E7EB]"
@@ -60,16 +99,28 @@ const Navbar = () => {
               <li className="mb-2">
                 <div className="flex items-center gap-3">
                   <img
-                    src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                    src={
+                      user.photoURL ||
+                      "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                    }
                     alt="Profile"
                     className="w-10 h-10 rounded-full border border-[#3BB273] object-cover"
                   />
                   <div className="text-sm">
-                    <p className="font-semibold text-[#1F2937]">{user.displayName || "User"}</p>
+                    <p className="font-semibold text-[#1F2937]">
+                      {user.displayName || "User"}
+                    </p>
                     <p className="text-[#6B7280]">{user.email}</p>
                   </div>
                 </div>
               </li>
+
+              <li>
+                <Link to="/myprofile" className="text-left text-[#1F2937]">
+                  My Profile
+                </Link>
+              </li>
+
               <li>
                 <button onClick={logOut} className="text-left text-[#EF4444]">
                   Log out
@@ -86,11 +137,15 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} className="cursor-pointer">
               <img
-                src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                src={
+                  user.photoURL ||
+                  "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                }
                 alt="Profile"
                 className="w-8 h-8 rounded-full border border-[#3BB273] object-cover"
               />
             </div>
+
             <ul
               tabIndex={0}
               className="dropdown-content menu p-3 shadow bg-white rounded-xl w-60 border border-[#E5E7EB]"
@@ -98,16 +153,27 @@ const Navbar = () => {
               <li className="mb-2">
                 <div className="flex items-center gap-2">
                   <img
-                    src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+                    src={
+                      user.photoURL ||
+                      "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                    }
                     alt="Profile"
                     className="w-8 h-8 rounded-full border border-[#3BB273] object-cover"
                   />
                   <div className="text-sm">
-                    <p className="font-semibold text-[#1F2937]">{user.displayName || "User"}</p>
+                    <p className="font-semibold text-[#1F2937]">
+                      {user.displayName || "User"}
+                    </p>
                     <p className="text-[#6B7280] truncate">{user.email}</p>
                   </div>
                 </div>
               </li>
+              <li>
+                <Link to="/myprofile" className="text-left text-[#1F2937]">
+                  My Profile
+                </Link>
+              </li>
+
               <li>
                 <button onClick={logOut} className="text-left text-[#EF4444]">
                   Log out
@@ -118,16 +184,23 @@ const Navbar = () => {
         )}
 
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost text-[#3BB273] text-2xl">☰</label>
+          <label tabIndex={0} className="btn btn-ghost text-[#3BB273] text-2xl">
+            ☰
+          </label>
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[10] p-3 shadow bg-white rounded-box w-56 text-[#1F2937]"
           >
             {navLinks}
+
             {!user && (
               <div className="mt-2 border-t border-gray-200 pt-2">
-                <Link to="/login" className="block py-1 text-[#3BB273] hover:underline">Login</Link>
-                <Link to="/register" className="block py-1 text-[#3BB273] hover:underline">Sign Up</Link>
+                <Link to="/login" className="block py-1 text-[#3BB273]">
+                  Login
+                </Link>
+                <Link to="/register" className="block py-1 text-[#3BB273]">
+                  Sign Up
+                </Link>
               </div>
             )}
           </ul>

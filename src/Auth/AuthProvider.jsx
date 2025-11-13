@@ -39,6 +39,12 @@ const AuthProvider = ({ children }) => {
             photoURL: photo,
         });
     };
+    const refreshUser = () => {
+        const currentUser = auth.currentUser;
+        setUser({
+            ...currentUser,
+        });
+    };
 
     const logOut = () => {
         setLoading(true);
@@ -61,6 +67,7 @@ const AuthProvider = ({ children }) => {
         googleLogin,
         logOut,
         updateUserProfile,
+        refreshUser,
     };
 
     return (
