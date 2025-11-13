@@ -30,7 +30,7 @@ const AddTrans = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/transactions",
+        "https://finease-server-three.vercel.app/transactions",
         newTransaction
       );
 

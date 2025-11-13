@@ -18,7 +18,7 @@ const Overview = () => {
     const fetchTransactions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/transactions?email=${user.email}`
+          `https://finease-server-three.vercel.app/transactions?email=${user.email}`
         );
         const transactions = res.data;
 

@@ -18,7 +18,7 @@ const MyTrans = () => {
     const fetchTransactions = async () => {
       if (!user?.email) return;
       const res = await axios.get(
-        `http://localhost:3000/transactions?email=${user.email}`
+        `https://finease-server-three.vercel.app/transactions?email=${user.email}`
       );
       setTransactions(res.data);
       setLoading(false);
@@ -39,7 +39,7 @@ const MyTrans = () => {
   const handleDeleteClick = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
     if (!confirmDelete) return;
-    await axios.delete(`http://localhost:3000/transactions/${id}`);
+    await axios.delete(`https://finease-server-three.vercel.app/transactions/${id}`);
     const updatedList = transactions.filter((t) => t._id !== id);
     setTransactions(updatedList);
   };
@@ -55,7 +55,7 @@ const MyTrans = () => {
       date: form.date.value,
     };
     await axios.patch(
-      `http://localhost:3000/transactions/${selectedTrans._id}`,
+      `https://finease-server-three.vercel.app/transactions/${selectedTrans._id}`,
       updated
     );
     const updatedList = transactions.map((t) =>
@@ -305,22 +305,49 @@ const MyTrans = () => {
       {viewModal && selectedTrans && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
+
             <button
               onClick={() => setViewModal(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-2xl"
             >
               &times;
             </button>
+
             <h2 className="text-xl font-semibold text-center mb-5">
               Transaction Details
             </h2>
-            <div className="space-y-2 text-[#374151]">
-              <p><strong>Type:</strong> {selectedTrans.type}</p>
-              <p><strong>Category:</strong> {selectedTrans.category}</p>
-              <p><strong>Amount:</strong>{selectedTrans.amount} BDT</p>
-              <p><strong>Date:</strong> {selectedTrans.date}</p>
-              <p><strong>Description:</strong> {selectedTrans.description}</p>
-            </div>
+
+            {(() => {
+              const totalCategoryAmount = transactions
+                .filter(
+                  (t) =>
+                    t.category === selectedTrans.category &&
+                    t.type === selectedTrans.type
+                )
+                .reduce((sum, t) => sum + Number(t.amount), 0);
+
+              return (
+                <div className="space-y-2 text-[#374151]">
+
+                  <p><strong>Type:</strong> {selectedTrans.type}</p>
+
+                  <p><strong>Category:</strong> {selectedTrans.category}</p>
+
+                  <p><strong>Amount:</strong> {selectedTrans.amount} BDT</p>
+
+                  <p><strong>Date:</strong> {selectedTrans.date}</p>
+
+                  <p><strong>Description:</strong> {selectedTrans.description}</p>
+
+                  <p className="pt-3 mt-3 border-t">
+                    <strong>Total Amount of this Category:</strong>{" "}
+                    {totalCategoryAmount} BDT
+                  </p>
+
+                </div>
+              );
+            })()}
+
           </div>
         </div>
       )}
