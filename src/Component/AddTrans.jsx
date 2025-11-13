@@ -38,7 +38,7 @@ const AddTrans = () => {
           icon: "success",
           title: "Transaction Added!",
           text: "Your transaction was saved successfully.",
-          confirmButtonColor: "#3BB273",
+          confirmButtonColor: "#22C55E",
         });
 
         setFormData({
@@ -74,21 +74,21 @@ const AddTrans = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7FAFC] flex items-center justify-center px-4 py-10">
-      <div className="bg-white shadow-md rounded-2xl p-8 w-full max-w-2xl border border-[#E5E7EB]">
-        <h2 className="text-3xl font-semibold text-center text-[#1F2937] mb-8">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-10">
+      <div className="bg-base-100 shadow border border-base-300 rounded-2xl p-8 w-full max-w-2xl">
+        <h2 className="text-3xl font-semibold text-center text-base-content mb-8">
           Add New Transaction
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block mb-1">Type</label>
+            <label className="block mb-1 text-base-content">Type</label>
             <select
               name="type"
               required
               value={formData.type}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
             >
               <option value="">Select Type</option>
               <option value="income">Income</option>
@@ -97,14 +97,14 @@ const AddTrans = () => {
           </div>
 
           <div>
-            <label className="block mb-1">Category</label>
+            <label className="block mb-1 text-base-content">Category</label>
             <select
               name="category"
               required
               disabled={!formData.type}
               value={formData.category}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
             >
               <option value="">Select Category</option>
               {(formData.type === "income"
@@ -117,42 +117,46 @@ const AddTrans = () => {
           </div>
 
           <div>
-            <label className="block mb-1">Amount</label>
+            <label className="block mb-1 text-base-content">Amount</label>
             <input
               type="number"
               required
               name="amount"
               value={formData.amount}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
             />
           </div>
 
           <div>
-            <label className="block mb-1">Description</label>
+            <label className="block mb-1 text-base-content">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2 h-20"
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2 h-20"
             ></textarea>
           </div>
 
           <div>
-            <label className="block mb-1">Date</label>
+            <label className="block mb-1 text-base-content">Date</label>
             <input
               type="date"
               required
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold"
+            className="w-full text-white py-2 rounded-lg font-semibold"
+            style={{
+              backgroundColor: "#22C55E",
+              border: "1px solid #22C55E",
+            }}
           >
             Add Transaction
           </button>

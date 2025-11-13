@@ -44,67 +44,63 @@ const Overview = () => {
 
   if (loading) {
     return (
-      <section className="bg-[#F7FAFC] py-16 px-6 md:px-20 text-center">
-        <p className="text-[#3BB273] text-lg font-medium">Loading overview...</p>
+      <section className="bg-base-100 py-16 px-6 md:px-20 text-center">
+        <p className="text-[#22C55E] text-lg font-medium">Loading overview...</p>
       </section>
     );
   }
 
   return (
-    <section className="bg-[#F7FAFC] py-16 px-6 md:px-20">
-      <h2 className="text-3xl font-semibold text-[#1F2937] mb-10 text-center">
+    <section className="bg-base-100 py-16 px-6 md:px-20">
+      <h2 className="text-3xl font-semibold text-base-content mb-10 text-center">
         Financial Overview
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-8 text-center hover:shadow-md transition-all duration-300">
-          <h3 className="text-lg font-medium text-[#6B7280] mb-1">
-            Total Income
-          </h3>
+        <div className="bg-base-200 rounded-2xl shadow border border-base-300 p-8 text-center hover:shadow-lg transition-all duration-300">
+          <h3 className="text-lg font-medium text-base-content/70 mb-1">Total Income</h3>
           {user ? (
-            <p className="text-4xl font-bold text-[#10B981]">
+            <p className="text-4xl font-bold text-[#22C55E]">
               ${totalIncome.toLocaleString()}
             </p>
           ) : (
-            <p className="text-[#6B7280] text-base font-medium">
+            <p className="text-base-content/60 text-base font-medium">
               Login to see total income
             </p>
           )}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-8 text-center hover:shadow-md transition-all duration-300">
-          <h3 className="text-lg font-medium text-[#6B7280] mb-1">
-            Total Expense
-          </h3>
+        <div className="bg-base-200 rounded-2xl shadow border border-base-300 p-8 text-center hover:shadow-lg transition-all duration-300">
+          <h3 className="text-lg font-medium text-base-content/70 mb-1">Total Expense</h3>
           {user ? (
             <p className="text-4xl font-bold text-[#EF4444]">
               ${totalExpense.toLocaleString()}
             </p>
           ) : (
-            <p className="text-[#6B7280] text-base font-medium">
+            <p className="text-base-content/60 text-base font-medium">
               Login to see total expense
             </p>
           )}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-8 text-center hover:shadow-md transition-all duration-300">
-          <h3 className="text-lg font-medium text-[#6B7280] mb-1">
-            Total Balance
-          </h3>
+        <div className="bg-base-200 rounded-2xl shadow border border-base-300 p-8 text-center hover:shadow-lg transition-all duration-300">
+          <h3 className="text-lg font-medium text-base-content/70 mb-1">Total Balance</h3>
           {user ? (
             <p
-              className={`text-4xl font-bold ${balance >= 0 ? "text-[#3BB273]" : "text-[#EF4444]"
-                }`}
+              className={`text-4xl font-bold ${
+                balance >= 0 ? "text-[#22C55E]" : "text-[#EF4444]"
+              }`}
             >
               ${balance.toLocaleString()}
             </p>
           ) : (
-            <p className="text-[#6B7280] text-base font-medium">
+            <p className="text-base-content/60 text-base font-medium">
               Login to see your balance
             </p>
           )}
         </div>
+
       </div>
     </section>
   );

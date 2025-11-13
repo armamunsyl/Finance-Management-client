@@ -36,11 +36,12 @@ const Report = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
+      <div className="min-h-screen flex items-center justify-center text-xl text-base-content">
         Please log in to view reports.
       </div>
     );
   }
+
   const categoryTotals = transactions.reduce((acc, t) => {
     if (!acc[t.category]) acc[t.category] = 0;
     acc[t.category] += Number(t.amount);
@@ -51,7 +52,11 @@ const Report = () => {
     name: key,
     value: value,
   }));
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
 
   const monthlyTotals = transactions.reduce((acc, t) => {
     const month = new Date(t.date).getMonth();
@@ -65,12 +70,13 @@ const Report = () => {
   }));
 
   return (
-    <section className="min-h-screen bg-[#F7FAFC] px-6 md:px-20 py-12">
-      <h2 className="text-3xl font-semibold text-center mb-10 text-[#1F2937]">
+    <section className="min-h-screen bg-base-200 px-6 md:px-20 py-12 text-base-content">
+
+      <h2 className="text-3xl font-semibold text-center mb-10">
         Financial Reports
       </h2>
 
-      <div className="bg-white border rounded-2xl p-6 mb-12 shadow-sm">
+      <div className="card bg-base-100 border border-base-300 rounded-2xl p-6 mb-12 shadow">
         <h3 className="text-xl font-semibold text-center mb-4">
           Category-wise Distribution
         </h3>
@@ -82,15 +88,11 @@ const Report = () => {
                 cx="50%"
                 cy="50%"
                 outerRadius={110}
-                fill="#8884d8"
                 dataKey="value"
                 label
               >
                 {pieData.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
@@ -99,7 +101,7 @@ const Report = () => {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="bg-white border rounded-2xl p-6 shadow-sm">
+      <div className="card bg-base-100 border border-base-300 rounded-2xl p-6 shadow">
         <h3 className="text-xl font-semibold text-center mb-4">
           Monthly Totals
         </h3>
@@ -115,6 +117,7 @@ const Report = () => {
           </ResponsiveContainer>
         </div>
       </div>
+
     </section>
   );
 };

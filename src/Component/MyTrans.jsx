@@ -16,22 +16,17 @@ const MyTrans = () => {
     document.body.style.overflow = showModal || viewModal ? "hidden" : "auto";
   }, [showModal, viewModal]);
 
-  // Fetch transactions
   useEffect(() => {
     const fetchTransactions = async () => {
       if (!user?.email) return;
-
       const res = await axios.get(
         `https://finease-server-three.vercel.app/transactions?email=${user.email}`
       );
-
       setTransactions(res.data);
       setLoading(false);
     };
-
     fetchTransactions();
   }, [user?.email]);
-
 
   const handleUpdateClick = (t) => {
     setSelectedTrans(t);
@@ -50,7 +45,7 @@ const MyTrans = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#EF4444",
-      cancelButtonColor: "#3BB273",
+      cancelButtonColor: "#22C55E",
       confirmButtonText: "Delete",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -64,7 +59,7 @@ const MyTrans = () => {
           icon: "success",
           title: "Deleted!",
           text: "Transaction removed successfully.",
-          confirmButtonColor: "#3BB273",
+          confirmButtonColor: "#22C55E",
         });
       }
     });
@@ -99,26 +94,27 @@ const MyTrans = () => {
       icon: "success",
       title: "Updated!",
       text: "Transaction updated successfully.",
-      confirmButtonColor: "#3BB273",
+      confirmButtonColor: "#22C55E",
     });
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-xl text-[#3BB273]">
+      <div className="min-h-screen flex justify-center items-center text-xl text-[#22C55E]">
         Loading your transactions...
       </div>
     );
   }
 
   return (
-    <section className="bg-[#F7FAFC] min-h-screen px-4 md:px-20 py-12 relative">
-      <h2 className="text-3xl font-semibold text-center mb-10">
+    <section className="bg-base-100 min-h-screen px-4 md:px-20 py-12">
+      <h2 className="text-3xl font-semibold text-center mb-10 text-base-content">
         My Transactions
       </h2>
-      <div className="hidden md:block overflow-x-auto max-w-6xl mx-auto bg-white border border-[#E5E7EB] rounded-2xl shadow-sm">
+
+      <div className="hidden md:block overflow-x-auto max-w-6xl mx-auto bg-base-100 border border-base-300 rounded-2xl shadow">
         <table className="w-full border-collapse">
-          <thead className="bg-[#3BB273] text-white">
+          <thead className="bg-[#22C55E] text-white">
             <tr>
               <th className="py-3 px-4 text-left">#</th>
               <th className="py-3 px-4 text-left">Type</th>
@@ -134,35 +130,36 @@ const MyTrans = () => {
               transactions.map((t, index) => (
                 <tr
                   key={t._id}
-                  className="border-b hover:bg-[#F9FAFB] transition-all"
+                  className="border-b border-base-300 hover:bg-base-200 transition-all"
                 >
                   <td className="py-3 px-4">{index + 1}</td>
 
                   <td
                     className={`py-3 px-4 font-medium ${
-                      t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                      t.type === "income" ? "text-[#22C55E]" : "text-[#EF4444]"
                     }`}
                   >
                     {t.type}
                   </td>
 
-                  <td className="py-3 px-4">{t.category}</td>
+                  <td className="py-3 px-4 text-base-content">{t.category}</td>
 
                   <td
                     className={`py-3 px-4 font-semibold ${
-                      t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                      t.type === "income" ? "text-[#22C55E]" : "text-[#EF4444]"
                     }`}
                   >
                     {t.type === "income" ? "+" : "-"}
                     {t.amount} BDT
                   </td>
 
-                  <td className="py-3 px-4">{t.date}</td>
+                  <td className="py-3 px-4 text-base-content">{t.date}</td>
 
                   <td className="py-3 px-4 text-center space-x-2">
                     <button
                       onClick={() => handleUpdateClick(t)}
-                      className="px-3 py-1 bg-[#3BB273] text-white rounded-md"
+                      className="px-3 py-1 rounded-md text-white"
+                      style={{ backgroundColor: "#22C55E" }}
                     >
                       Update
                     </button>
@@ -176,7 +173,11 @@ const MyTrans = () => {
 
                     <button
                       onClick={() => handleViewClick(t)}
-                      className="px-3 py-1 border border-[#3BB273] text-[#3BB273] rounded-md"
+                      className="px-3 py-1 border rounded-md"
+                      style={{
+                        borderColor: "#22C55E",
+                        color: "#22C55E",
+                      }}
                     >
                       View
                     </button>
@@ -187,7 +188,7 @@ const MyTrans = () => {
               <tr>
                 <td
                   colSpan="6"
-                  className="text-center py-6 text-[#6B7280]"
+                  className="text-center py-6 text-base-content/60"
                 >
                   No transactions found
                 </td>
@@ -196,16 +197,17 @@ const MyTrans = () => {
           </tbody>
         </table>
       </div>
-      <div className="md:hidden flex flex-col gap-4">
+
+      <div className="md:hidden flex flex-col gap-4 mt-6">
         {transactions.map((t) => (
           <div
             key={t._id}
-            className="bg-white border rounded-2xl shadow-sm p-5"
+            className="bg-base-100 border border-base-300 rounded-2xl shadow p-5"
           >
             <div className="flex justify-between mb-2">
               <p
                 className={`font-semibold ${
-                  t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                  t.type === "income" ? "text-[#22C55E]" : "text-[#EF4444]"
                 }`}
               >
                 {t.type}
@@ -213,7 +215,7 @@ const MyTrans = () => {
 
               <p
                 className={`font-bold ${
-                  t.type === "income" ? "text-[#10B981]" : "text-[#EF4444]"
+                  t.type === "income" ? "text-[#22C55E]" : "text-[#EF4444]"
                 }`}
               >
                 {t.type === "income" ? "+" : "-"}
@@ -221,13 +223,14 @@ const MyTrans = () => {
               </p>
             </div>
 
-            <p className="text-sm">Category: {t.category}</p>
-            <p className="text-sm">Date: {t.date}</p>
+            <p className="text-sm text-base-content">Category: {t.category}</p>
+            <p className="text-sm text-base-content">Date: {t.date}</p>
 
             <div className="flex justify-between mt-3">
               <button
                 onClick={() => handleUpdateClick(t)}
-                className="px-3 py-1 bg-[#3BB273] text-white rounded-md text-sm"
+                className="px-3 py-1 text-white rounded-md text-sm"
+                style={{ backgroundColor: "#22C55E" }}
               >
                 Update
               </button>
@@ -241,7 +244,11 @@ const MyTrans = () => {
 
               <button
                 onClick={() => handleViewClick(t)}
-                className="px-3 py-1 border border-[#3BB273] text-[#3BB273] rounded-md text-sm"
+                className="px-3 py-1 border rounded-md text-sm"
+                style={{
+                  borderColor: "#22C55E",
+                  color: "#22C55E",
+                }}
               >
                 View
               </button>
@@ -249,17 +256,18 @@ const MyTrans = () => {
           </div>
         ))}
       </div>
+
       {showModal && selectedTrans && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md relative">
+          <div className="bg-base-100 border border-base-300 rounded-2xl shadow-lg p-6 w-full max-w-md relative">
             <button
               onClick={() => setShowModal(false)}
-              className="absolute right-4 top-3 text-2xl"
+              className="absolute right-4 top-3 text-2xl text-base-content"
             >
-              &times;
+              ×
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
+            <h2 className="text-xl font-bold mb-4 text-center text-base-content">
               Update Transaction
             </h2>
 
@@ -276,14 +284,14 @@ const MyTrans = () => {
               }}
             >
               <div>
-                <label className="block mb-1">Type</label>
+                <label className="block mb-1 text-base-content">Type</label>
                 <select
                   name="type"
                   value={selectedTrans.type}
                   onChange={(e) =>
                     setSelectedTrans({ ...selectedTrans, type: e.target.value })
                   }
-                  className="w-full border px-3 py-2 rounded-lg"
+                  className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
                 >
                   <option value="income">Income</option>
                   <option value="expense">Expense</option>
@@ -291,109 +299,149 @@ const MyTrans = () => {
               </div>
 
               <div>
-                <label className="block mb-1">Description</label>
-                <textarea
-                  name="description"
-                  defaultValue={selectedTrans.description}
-                  className="w-full border px-3 py-2 rounded-lg h-20"
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block mb-1">Category</label>
+                <label className="block mb-1 text-base-content">Category</label>
                 <select
                   name="category"
-                  defaultValue={selectedTrans.category}
-                  className="w-full border px-3 py-2 rounded-lg"
+                  value={selectedTrans.category}
+                  onChange={(e) =>
+                    setSelectedTrans({
+                      ...selectedTrans,
+                      category: e.target.value,
+                    })
+                  }
+                  className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
                 >
-                  {selectedTrans.type === "income" ? (
-                    <>
-                      <option>Job</option>
-                      <option>Business</option>
-                      <option>Other</option>
-                    </>
-                  ) : (
-                    <>
-                      <option>Food</option>
-                      <option>Transport</option>
-                      <option>Education</option>
-                      <option>Home</option>
-                      <option>Freelance</option>
-                      <option>Entertainment</option>
-                      <option>Health</option>
-                      <option>Investment</option>
-                      <option>Others</option>
-                    </>
-                  )}
+                  {(selectedTrans.type === "income"
+                    ? ["Job", "Business", "Other"]
+                    : [
+                        "Food",
+                        "Transport",
+                        "Education",
+                        "Shopping",
+                        "Home",
+                        "Freelance",
+                        "Entertainment",
+                        "Health",
+                        "Investment",
+                        "Others",
+                      ]
+                  ).map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
                 </select>
               </div>
 
               <div>
-                <label className="block mb-1">Amount</label>
+                <label className="block mb-1 text-base-content">Amount</label>
                 <input
                   type="number"
                   name="amount"
                   defaultValue={selectedTrans.amount}
-                  className="w-full border px-3 py-2 rounded-lg"
+                  className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block mb-1">Date</label>
+                <label className="block mb-1 text-base-content">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  defaultValue={selectedTrans.description}
+                  className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2 h-20"
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block mb-1 text-base-content">Date</label>
                 <input
                   type="date"
                   name="date"
                   defaultValue={selectedTrans.date}
-                  className="w-full border px-3 py-2 rounded-lg"
+                  className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
+                  required
                 />
               </div>
 
-              <button className="w-full bg-[#3BB273] text-white py-2 rounded-lg mt-2 font-semibold">
-                Update Transaction
+              <button
+                type="submit"
+                className="w-full py-2 rounded-lg text-white font-semibold mt-3"
+                style={{
+                  backgroundColor: "#22C55E",
+                  border: "1px solid #22C55E",
+                }}
+              >
+                Save Changes
               </button>
             </form>
           </div>
         </div>
       )}
+
       {viewModal && selectedTrans && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md relative">
-
+          <div className="bg-base-100 border border-base-300 rounded-2xl shadow-lg p-6 w-full max-w-md relative">
             <button
               onClick={() => setViewModal(false)}
-              className="absolute right-4 top-3 text-2xl"
+              className="absolute right-4 top-3 text-2xl text-base-content"
             >
-              &times;
+              ×
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
+            <h2 className="text-xl font-bold mb-4 text-center text-base-content">
               Transaction Details
             </h2>
 
-            {(() => {
-              const totalCategoryAmount = transactions
-                .filter(
-                  (t) =>
-                    t.category === selectedTrans.category &&
-                    t.type === selectedTrans.type
-                )
-                .reduce((sum, t) => sum + Number(t.amount), 0);
+            <div className="space-y-3">
+              <p className="text-base-content">
+                <span className="font-semibold">Type:</span> {selectedTrans.type}
+              </p>
 
-              return (
-                <div className="space-y-2">
-                  <p><strong>Type:</strong> {selectedTrans.type}</p>
-                  <p><strong>Category:</strong> {selectedTrans.category}</p>
-                  <p><strong>Amount:</strong> {selectedTrans.amount} BDT</p>
-                  <p><strong>Date:</strong> {selectedTrans.date}</p>
-                  <p><strong>Description:</strong> {selectedTrans.description}</p>
+              <p className="text-base-content">
+                <span className="font-semibold">Category:</span>{" "}
+                {selectedTrans.category}
+              </p>
 
-                  <p className="border-t pt-3 mt-3">
-                    <strong>Total Amount of this Category: </strong>
-                    {totalCategoryAmount} BDT
-                  </p>
-                </div>
-              );
-            })()}
+              <p
+                className={`font-bold ${
+                  selectedTrans.type === "income"
+                    ? "text-[#22C55E]"
+                    : "text-[#EF4444]"
+                }`}
+              >
+                Amount:{" "}
+                {selectedTrans.type === "income" ? "+" : "-"}
+                {selectedTrans.amount} BDT
+              </p>
+
+              <p className="text-base-content">
+                <span className="font-semibold">Date:</span>{" "}
+                {selectedTrans.date}
+              </p>
+
+              <p className="text-base-content">
+                <span className="font-semibold">Description:</span>{" "}
+                {selectedTrans.description}
+              </p>
+            </div>
+
+            <div className="mt-6 p-4 bg-base-200 rounded-xl border border-base-300">
+              <p className="font-semibold mb-2 text-base-content">
+                Total with this category
+              </p>
+
+              <p className="text-lg font-bold text-[#22C55E]">
+                {
+                  transactions
+                    .filter(
+                      (t) => t.category === selectedTrans.category
+                    )
+                    .reduce((sum, t) => sum + Number(t.amount), 0)
+                }{" "}
+                BDT
+              </p>
+            </div>
           </div>
         </div>
       )}

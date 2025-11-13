@@ -22,13 +22,12 @@ const MyProfile = () => {
 
     updateUserProfile(name, photoURL)
       .then(() => {
-        refreshUser(); 
-
+        refreshUser();
         Swal.fire({
           icon: "success",
           title: "Profile Updated!",
           text: "Your changes are saved.",
-          confirmButtonColor: "#3BB273",
+          confirmButtonColor: "#22C55E",
         });
       })
       .catch(() => {
@@ -48,7 +47,7 @@ const MyProfile = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#EF4444",
-      cancelButtonColor: "#3BB273",
+      cancelButtonColor: "#22C55E",
       confirmButtonText: "Logout",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -56,7 +55,7 @@ const MyProfile = () => {
           Swal.fire({
             icon: "success",
             title: "Logged out!",
-            confirmButtonColor: "#3BB273",
+            confirmButtonColor: "#22C55E",
           });
         });
       }
@@ -64,26 +63,26 @@ const MyProfile = () => {
   };
 
   return (
-    <section className="bg-[#F7FAFC] min-h-screen px-4 md:px-20 py-12 flex justify-center items-center">
-      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-md w-full max-w-md p-8 text-center">
-
+    <section className="bg-base-200 min-h-screen px-4 md:px-20 py-12 flex justify-center items-center">
+      <div className="bg-base-100 border border-base-300 rounded-2xl shadow w-full max-w-md p-8 text-center">
         <div className="flex justify-center mb-6">
           <img
             src={photoURL}
             alt="User Avatar"
-            className="w-28 h-28 rounded-full border-4 border-[#3BB273] shadow-sm object-cover"
+            className="w-28 h-28 rounded-full border-4"
+            style={{ borderColor: "#22C55E" }}
           />
         </div>
 
-        <h2 className="text-2xl font-semibold text-[#1F2937] mb-1">
+        <h2 className="text-2xl font-semibold text-base-content mb-1">
           {name}
         </h2>
 
-        <p className="text-[#6B7280] mb-6">{user?.email}</p>
+        <p className="text-base-content/70 mb-6">{user?.email}</p>
 
         <form onSubmit={handleUpdate} className="space-y-5 text-left">
           <div>
-            <label className="block font-medium mb-1 text-[#374151]">
+            <label className="block font-medium mb-1 text-base-content">
               Name
             </label>
             <input
@@ -91,12 +90,12 @@ const MyProfile = () => {
               value={name}
               required
               onChange={(e) => setName(e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg bg-white"
+              className="w-full border border-base-300 px-3 py-2 rounded-lg bg-base-100"
             />
           </div>
 
           <div>
-            <label className="block font-medium mb-1 text-[#374151]">
+            <label className="block font-medium mb-1 text-base-content">
               Photo URL
             </label>
             <input
@@ -104,13 +103,14 @@ const MyProfile = () => {
               value={photoURL}
               required
               onChange={(e) => setPhotoURL(e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg bg-white"
+              className="w-full border border-base-300 px-3 py-2 rounded-lg bg-base-100"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all"
+            className="w-full text-white py-2 rounded-lg font-semibold"
+            style={{ backgroundColor: "#22C55E" }}
           >
             Update Profile
           </button>
@@ -118,7 +118,7 @@ const MyProfile = () => {
 
         <button
           onClick={handleLogout}
-          className="w-full bg-[#EF4444] text-white py-2 rounded-lg font-semibold hover:bg-[#DC2626] transition-all duration-200 mt-4"
+          className="w-full bg-[#EF4444] text-white py-2 rounded-lg font-semibold mt-4"
         >
           Logout
         </button>

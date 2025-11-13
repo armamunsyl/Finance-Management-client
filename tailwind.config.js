@@ -1,29 +1,37 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
 
   theme: {
     extend: {},
   },
 
-  plugins: [require("daisyui")],
-
   daisyui: {
     themes: [
       {
         light: {
           ...require("daisyui/src/theming/themes")["light"],
-          primary: "#3BB273",
+          primary: "#16A34A",
+          "primary-focus": "#128838",
+          "primary-content": "#ffffff",
         },
+
         dark: {
           ...require("daisyui/src/theming/themes")["dark"],
-          primary: "#3BB273",
-          "base-100": "#181A2A",
-          "base-200": "#1F2034",
-          "base-300": "#222436",
-          "base-content": "#E8EAF6",
+          primary: "#16A34A",
+          "primary-focus": "#128838",
+          "primary-content": "#ffffff",
+          "base-100": "#1E1E1E",
+          "base-200": "#161616",
+          "base-300": "#0E0E0E",
+          "base-content": "#e5e7eb",
         },
       },
     ],
+
+    // ⛔ THIS IS IMPORTANT
+    darkTheme: "dark",
   },
+
+  plugins: [require("daisyui")],
 };

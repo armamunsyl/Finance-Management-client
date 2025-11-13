@@ -24,9 +24,8 @@ const Login = () => {
           icon: "success",
           title: "Login Successful!",
           text: "Welcome back to FinEase.",
-          confirmButtonColor: "#3BB273",
+          confirmButtonColor: "#22C55E",
         });
-
         navigate(from, { replace: true });
       })
       .catch(() => {
@@ -42,15 +41,13 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     setLoading(true);
-
     googleLogin()
       .then(() => {
         Swal.fire({
           icon: "success",
           title: "Google Login Successful!",
-          confirmButtonColor: "#3BB273",
+          confirmButtonColor: "#22C55E",
         });
-
         navigate(from, { replace: true });
       })
       .catch(() => {
@@ -64,18 +61,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7FAFC] flex items-center justify-center px-4 mt-4">
-      <div className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md border border-[#E5E7EB]">
-        <h2 className="text-3xl font-bold text-center text-[#1F2937] mb-2">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 mt-4">
+      <div className="bg-base-100 shadow border border-base-300 rounded-2xl p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-base-content mb-2">
           Welcome Back!
         </h2>
-        <p className="text-center text-[#6B7280] mb-8">
+        <p className="text-center text-base-content/60 mb-8">
           Login to your FinEase account
         </p>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
+            <label className="block text-sm text-base-content mb-1">
               Email Address
             </label>
             <input
@@ -83,12 +80,12 @@ const Login = () => {
               name="email"
               required
               placeholder="example@email.com"
-              className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
+              className="w-full px-4 py-2 border border-base-300 bg-base-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
+            <label className="block text-sm text-base-content mb-1">
               Password
             </label>
             <input
@@ -96,43 +93,44 @@ const Login = () => {
               name="password"
               required
               placeholder="Password"
-              className="w-full px-4 py-2 border border-[#D1D5DB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3BB273]"
+              className="w-full px-4 py-2 border border-base-300 bg-base-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#3BB273] text-white py-2 rounded-lg font-semibold hover:bg-[#34A267] transition-all duration-200 disabled:opacity-60"
+            className="w-full text-white py-2 rounded-lg font-semibold"
+            style={{ backgroundColor: "#22C55E", border: "1px solid #22C55E" }}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <div className="flex items-center my-6">
-          <hr className="flex-1 border-[#E5E7EB]" />
-          <span className="px-2 text-sm text-[#9CA3AF]">or</span>
-          <hr className="flex-1 border-[#E5E7EB]" />
+          <hr className="flex-1 border-base-300" />
+          <span className="px-2 text-sm text-base-content/50">or</span>
+          <hr className="flex-1 border-base-300" />
         </div>
 
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 border border-[#D1D5DB] py-2 rounded-lg hover:bg-[#F9FAFB] transition-all duration-200 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 border border-base-300 py-2 rounded-lg hover:bg-base-200 transition-all"
         >
           <img
             src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
             alt="Google icon"
             className="w-5 h-5"
           />
-          <span className="font-medium text-[#374151]">
+          <span className="font-medium text-base-content">
             Continue with Google
           </span>
         </button>
 
-        <p className="text-center text-sm text-[#6B7280] mt-6">
+        <p className="text-center text-sm text-base-content/60 mt-6">
           Don't have an account?{" "}
-          <Link to="/register" className="text-[#3BB273] font-medium hover:underline">
+          <Link to="/register" className="text-[#22C55E] font-medium hover:underline">
             Register
           </Link>
         </p>
