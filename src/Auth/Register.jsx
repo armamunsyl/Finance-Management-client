@@ -19,6 +19,21 @@ const Register = () => {
     const photo = e.target.photo.value;
     const password = e.target.password.value;
 
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasLength = password.length >= 6;
+
+    if (!hasUpper || !hasLower || !hasLength) {
+      Swal.fire({
+        icon: "error",
+        title: "Weak Password!",
+        text: "Password must contain 1 uppercase, 1 lowercase and at least 6 characters.",
+        confirmButtonColor: "#EF4444",
+      });
+      setLoading(false);
+      return;
+    }
+
     createUser(email, password)
       .then(() => {
         updateUserProfile(name, photo)
