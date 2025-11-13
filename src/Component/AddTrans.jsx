@@ -27,34 +27,25 @@ const AddTrans = () => {
       userName: user?.displayName,
     };
 
-    try {
-      const res = await axios.post(
-        "https://finease-server-three.vercel.app/transactions",
-        newTransaction
-      );
+    const res = await axios.post(
+      "https://finease-server-three.vercel.app/transactions",
+      newTransaction
+    );
 
-      if (res.data.insertedId) {
-        Swal.fire({
-          icon: "success",
-          title: "Transaction Added!",
-          text: "Your transaction was saved successfully.",
-          confirmButtonColor: "#22C55E",
-        });
-
-        setFormData({
-          type: "",
-          category: "",
-          amount: "",
-          description: "",
-          date: "",
-        });
-      }
-    } catch (err) {
+    if (res.data.insertedId) {
       Swal.fire({
-        icon: "error",
-        title: "Failed!",
-        text: "Could not add transaction. Try again.",
-        confirmButtonColor: "#EF4444",
+        icon: "success",
+        title: "Transaction Added!",
+        text: "Your transaction was saved successfully.",
+        confirmButtonColor: "#22C55E",
+      });
+
+      setFormData({
+        type: "",
+        category: "",
+        amount: "",
+        description: "",
+        date: "",
       });
     }
   };
@@ -147,6 +138,26 @@ const AddTrans = () => {
               value={formData.date}
               onChange={handleChange}
               className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-base-content">User Email</label>
+            <input
+              type="text"
+              readOnly
+              value={user?.email}
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2 opacity-70 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-base-content">User Name</label>
+            <input
+              type="text"
+              readOnly
+              value={user?.displayName}
+              className="w-full border border-base-300 bg-base-100 rounded-lg px-3 py-2 opacity-70 cursor-not-allowed"
             />
           </div>
 
